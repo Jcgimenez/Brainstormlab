@@ -8,11 +8,22 @@ import WebButton from "@/components/WebButton";
 import SoftwareButton from "@/components/SoftwareButton";
 import Light from '@/components/Light';
 import Cross from '@/components/Cross';
+import CreaTuIdea from '@/components/CreaTuIdea';
 
 export default function Home() {
   const [isWebOn, setisWebOn] = useState(false);
   const [isPhoneOn, setisPhoneOn] = useState(false);
   const [isSoftwareOn, setisSoftwareOn] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+    console.log("hola");
+  };
 
   const handleWebMouseEnter = () => {
     setisWebOn(true);
@@ -54,7 +65,7 @@ export default function Home() {
           </div>
           <div className='border-2 border-white rounded-lg p-10 flex flex-col justify-center items-center'>
             <p className="text-white font-semibold my-2">Crear una pagina web</p>
-            <WebButton />
+            <WebButton onClick={openPopup} />
           </div>
         </div>
         <div className="flex flex-col justify-center items-center cursor-not-allowed"
@@ -65,7 +76,7 @@ export default function Home() {
             <Cross className={isPhoneOn ? 'visible' : 'invisible'} />
           </div>
           <div className='border-2 border-white rounded-lg p-10 flex flex-col justify-center items-center'>
-            <p className="text-white font-semibold my-2">Crear una aplicacion de celular</p>
+            <p className="text-white font-semibold my-2">Crear una aplicacion</p>
             <PhoneButton />
           </div>
         </div>
@@ -82,6 +93,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {isPopupOpen && <CreaTuIdea onClose={closePopup} />}
     </div>
   );
 };

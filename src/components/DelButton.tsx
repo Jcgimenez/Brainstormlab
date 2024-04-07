@@ -9,6 +9,7 @@ export default function DelButton({ children, className, onClick, disabled = fal
     return (
         <button
             type={type}
+            onClick={onClick}
             className="flex justify-center items-center gap-2 w-28 h-12 cursor-pointer rounded-md shadow-2xl text-white font-semibold bg-gradient-to-r from-[#fb7185] via-[#e11d48] to-[#be123c] hover:shadow-xl hover:shadow-red-500 hover:scale-105 duration-300 hover:from-[#be123c] hover:to-[#fb7185]"
         >
             <svg viewBox="0 0 15 15" className="w-5 fill-white">
