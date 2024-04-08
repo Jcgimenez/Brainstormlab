@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import WebButton from './WebButton';
 import DelButton from './DelButton';
 import ValidButton from './ValidButton';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface CreaTuIdeaProps {
     onClose: () => void;
@@ -11,7 +12,10 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        idea: ''
+        projectTitle: '',
+        creationDate: '',
+        idea: '',
+        date: new Date().toLocaleDateString()
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -22,17 +26,48 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(formData);
+
+        try {
+            toast.info('Enviando correo electrónico...');
+
+            const response = await fetch('/api/sendEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ...formData, emailReceiver: formData.email })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                toast.success('Correo electrónico enviado con éxito');
+            } else {
+                toast.error('Error al enviar el correo electrónico');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Error al enviar el correo electrónico');
+        }
+
         onClose();
     };
+
+    useEffect(() => {
+        setFormData(prevState => ({
+            ...prevState,
+            date: new Date().toLocaleDateString()
+        }));
+    }, [formData.name, formData.email, formData.idea]);
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white h-full w-full">
             <div className="bg-gray-800 p-8 rounded-lg w-[60%]">
                 <div className='flex justify-center'>
-                    <h2 className="text-2xl font-semibold mb-4">Describe tu idea</h2>
+                    <h2 className="text-2xl font-semibold mb-4">Describe tu idea y enviamela</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-8 flex gap-12">
@@ -49,12 +84,12 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                             />
                         </div>
                         <div className='w-full'>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-500">Email</label>
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-500">Email</label>
                             <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
                                 className="mt-1 p-2 w-full border rounded-md bg-slate-200 text-gray-950"
                                 required
@@ -63,12 +98,12 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                     </div>
                     <div className="mb-8 flex gap-12">
                         <div className='w-full'>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-500">Titulo de la idea</label>
+                            <label htmlFor="projectTitle" className="block text-sm font-medium text-gray-500">Título de tu proyecto</label>
                             <input
                                 type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
+                                id="projectTitle"
+                                name="projectTitle"
+                                value={formData.projectTitle}
                                 onChange={handleChange}
                                 className="mt-1 p-2 w-full border rounded-md bg-slate-200 text-gray-950"
                                 required
@@ -79,9 +114,9 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                             <input
                                 readOnly={true}
                                 type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
+                                id="date"
+                                name="date"
+                                value={formData.date}
                                 onChange={handleChange}
                                 className="mt-1 p-2 w-full border rounded-md bg-slate-200 text-gray-950 cursor-not-allowed"
                                 placeholder='Consumo Automatico'
@@ -89,7 +124,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                         </div>
                     </div>
                     <div className="mb-8">
-                        <label htmlFor="idea" className="block text-sm font-medium text-gray-500">Descripcion de tu idea</label>
+                        <label htmlFor="idea" className="block text-sm font-medium text-gray-500">Describe la idea</label>
                         <textarea
                             id="idea"
                             name="idea"
@@ -106,6 +141,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                     </div>
                 </form>
             </div>
+            <ToastContainer />
         </div>
     );
 };
