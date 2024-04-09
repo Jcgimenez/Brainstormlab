@@ -67,7 +67,7 @@ export default function Home() {
       <div className='top-0'>
         <Bienvenida />
       </div>
-      <div className="flex-grow flex justify-center items-center">
+      <div className="flex-grow flex justify-center items-center mb-8">
         <div className="flex flex-col md:flex-row justify-center md:justify-between gap-4 md:gap-52 mt-32">
           <div
             className="flex flex-col justify-center items-center"
