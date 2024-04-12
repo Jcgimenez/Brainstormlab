@@ -1,55 +1,48 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
-interface EmailData {
-    name: string;
-    email: string;
-    idea: string;
-    emailReceiver: string;
-}
+dotenv.config();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
-
-    if (!emailUser || !emailPass) {
-        return res.status(500).json({ success: false, message: 'Credenciales de correo electrónico no configuradas' });
-    }
-
+export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-        const { name, email, idea, emailReceiver } = req.body as EmailData;
-
-        // Validar datos
-        if (!name || !email || !idea || !emailReceiver) {
-            return res.status(400).json({ success: false, message: 'Datos incompletos' });
-        }
-
-        // Configurar nodemailer
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: emailUser,
-                pass: emailPass
-            }
-        });
-
-        // Configurar el correo electrónico
-        const mailOptions = {
-            from: emailUser,
-            to: emailReceiver,
-            subject: 'Nueva idea recibida',
-            text: `Nombre: ${name}\nEmail: ${email}\nIdea: ${idea}`
-        };
-
-        // Enviar el correo electrónico
         try {
+            const { name, email, projectTitle, creationDate, idea, emailReceiver } = req.body;
+
+            const transporter = nodemailer.createTransport({
+                host: process.env.SMTP_HOST || '',
+                port: parseInt(process.env.SMTP_PORT || '2525', 10),
+                secure: false,
+                auth: {
+                    user: process.env.SMTP_USER || '',
+                    pass: process.env.SMTP_PASS || '',
+                },
+            });
+
+            const mailOptions = {
+                from: process.env.SMTP_USER || '',
+                to: emailReceiver,
+                subject: `Nueva idea de ${name}`,
+                text: `
+                    Nombre: ${name}
+                    Email: ${email}
+                    Título del proyecto: ${projectTitle}
+                    Fecha de creación: ${creationDate}
+                    
+                    Descripción de la idea:
+                    ${idea}
+                `,
+            };
+
             await transporter.sendMail(mailOptions);
+
             res.status(200).json({ success: true });
+            console.log('Email sent successfully');
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ success: false, message: 'Error al enviar el correo electrónico' });
+            console.error('Error sending email:', error);
+            res.status(500).json({ success: false, message: 'Error sending email' });
         }
     } else {
-        res.status(405).json({ success: false, message: 'Método no permitido' });
+        res.status(405).json({ success: false, message: 'Method not allowed' });
     }
-}
+};
