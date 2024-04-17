@@ -15,14 +15,14 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         projectTitle: '',
         creationDate: '',
         idea: '',
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString(),
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
+        setFormData((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -30,49 +30,47 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         e.preventDefault();
 
         try {
-            toast.info('Enviando correo electrónico...');
+            toast.info('Guardando en la base de datos...');
 
-            const response = await fetch('/api/sendEmail', {
+            const response = await fetch('/api/saveIdea', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...formData, emailReceiver: formData.email })
+                body: JSON.stringify(formData),
             });
 
             const data = await response.json();
 
-            if (data.success) {
-                toast.success('Correo electrónico enviado con éxito');
-            } else {
-                toast.error('Error al enviar el correo electrónico');
-            }
+
+            toast.success('Datos guardados con éxito!');
+
         } catch (error) {
-            console.error('Error:', error);
-            toast.error('Error al enviar el correo electrónico');
+            toast.error('Error al guardar los datos');
         }
 
         onClose();
     };
 
     useEffect(() => {
-        setFormData(prevState => ({
+        setFormData((prevState) => ({
             ...prevState,
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
         }));
     }, [formData.name, formData.email, formData.idea]);
-
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white h-full w-full">
             <div className="bg-gray-800 p-8 rounded-lg w-[60%]">
-                <div className='flex justify-center'>
+                <div className="flex justify-center">
                     <h2 className="text-2xl font-semibold mb-4">Describe tu idea y enviamela</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-8 flex gap-12">
-                        <div className='w-full'>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-500">Nombre y Apellido</label>
+                        <div className="w-full">
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-500">
+                                Nombre y Apellido
+                            </label>
                             <input
                                 type="text"
                                 id="name"
@@ -83,8 +81,10 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                                 required
                             />
                         </div>
-                        <div className='w-full'>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-500">Email</label>
+                        <div className="w-full">
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-500">
+                                Email
+                            </label>
                             <input
                                 type="email"
                                 id="email"
@@ -97,8 +97,10 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                         </div>
                     </div>
                     <div className="mb-8 flex gap-12">
-                        <div className='w-full'>
-                            <label htmlFor="projectTitle" className="block text-sm font-medium text-gray-500">Título de tu proyecto</label>
+                        <div className="w-full">
+                            <label htmlFor="projectTitle" className="block text-sm font-medium text-gray-500">
+                                Título de tu proyecto
+                            </label>
                             <input
                                 type="text"
                                 id="projectTitle"
@@ -109,8 +111,10 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                                 required
                             />
                         </div>
-                        <div className='w-full'>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-500">Fecha de creacion</label>
+                        <div className="w-full">
+                            <label htmlFor="date" className="block text-sm font-medium text-gray-500">
+                                Fecha de creación
+                            </label>
                             <input
                                 readOnly={true}
                                 type="text"
@@ -119,12 +123,14 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                                 value={formData.date}
                                 onChange={handleChange}
                                 className="mt-1 p-2 w-full border rounded-md bg-slate-200 text-gray-950 cursor-not-allowed"
-                                placeholder='Consumo Automatico'
+                                placeholder="Consumo Automático"
                             />
                         </div>
                     </div>
                     <div className="mb-8">
-                        <label htmlFor="idea" className="block text-sm font-medium text-gray-500">Describe la idea</label>
+                        <label htmlFor="idea" className="block text-sm font-medium text-gray-500">
+                            Describe la idea
+                        </label>
                         <textarea
                             id="idea"
                             name="idea"
