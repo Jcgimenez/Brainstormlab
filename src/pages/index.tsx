@@ -8,20 +8,40 @@ import WebButton from "@/components/WebButton";
 import SoftwareButton from "@/components/SoftwareButton";
 import Light from '@/components/Light';
 import Cross from '@/components/Cross';
-import CreaTuIdea from '@/components/CreaTuWeb';
+import CreaTuWeb from '@/components/CreaTuWeb';
+import CreaTuApp from '@/components/CreaTuApp';
+import CreaTuSoftware from '@/components/CreaTuSoftware';
 
 export default function Home() {
   const [isWebOn, setisWebOn] = useState(false);
   const [isPhoneOn, setisPhoneOn] = useState(false);
   const [isSoftwareOn, setisSoftwareOn] = useState(false);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isPopupOpenWeb, setIsPopupOpenWeb] = useState(false);
+  const [isPopupOpenPhone, setIsPopupOpenPhone] = useState(false);
+  const [isPopupOpenSoftware, setIsPopupOpenSoftware] = useState(false);
 
-  const closePopup = () => {
-    setIsPopupOpen(false);
+  const closePopupWeb = () => {
+    setIsPopupOpenWeb(false);
   };
 
-  const openPopup = () => {
-    setIsPopupOpen(true);
+  const openPopupWeb = () => {
+    setIsPopupOpenWeb(true);
+  };
+
+  const closePopupPhone = () => {
+    setIsPopupOpenPhone(false);
+  };
+
+  const openPopupPhone = () => {
+    setIsPopupOpenPhone(true);
+  };
+
+  const closePopupSoftware = () => {
+    setIsPopupOpenSoftware(false);
+  };
+
+  const openPopupSoftware = () => {
+    setIsPopupOpenSoftware(true);
   };
 
   const handleWebMouseEnter = () => {
@@ -79,35 +99,37 @@ export default function Home() {
             </div>
             <div className='border-2 border-white rounded-lg px-10 pb-5 pt-3 flex flex-col justify-center items-center'>
               <p className="text-white font-semibold my-2">Crear una pagina web</p>
-              <WebButton onClick={openPopup} />
+              <WebButton onClick={openPopupWeb} />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center cursor-not-allowed"
+          <div className="flex flex-col justify-center items-center"
             onMouseEnter={handlePhoneMouseEnter}
             onMouseLeave={handlePhoneMouseLeave}
           >
             <div className="mb-6">
-              <Cross className={isPhoneOn ? 'visible' : 'invisible'} />
+              <Light className={isPhoneOn ? 'visible' : 'invisible'} />
             </div>
             <div className='border-2 border-white rounded-lg px-10 pb-5 pt-3 flex flex-col justify-center items-center'>
               <p className="text-white font-semibold my-2">Crear una aplicacion</p>
-              <PhoneButton />
+              <PhoneButton onClick={openPopupPhone} />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center cursor-not-allowed"
+          <div className="flex flex-col justify-center items-center "
             onMouseEnter={handleSoftwareMouseEnter}
             onMouseLeave={handleSoftwareMouseLeave}
           >
             <div className="mb-6">
-              <Cross className={isSoftwareOn ? 'visible' : 'invisible'} />
+              <Light className={isSoftwareOn ? 'visible' : 'invisible'} />
             </div>
             <div className='border-2 border-white rounded-lg px-10 pb-5 pt-3 flex flex-col justify-center items-center'>
               <p className="text-white font-semibold my-2">Crear un software</p>
-              <SoftwareButton />
+              <SoftwareButton onClick={openPopupSoftware} />
             </div>
           </div>
         </div>
-        {isPopupOpen && <CreaTuIdea onClose={closePopup} />}
+        {isPopupOpenWeb && <CreaTuWeb onClose={closePopupWeb} />}
+        {isPopupOpenPhone && <CreaTuApp onClose={closePopupPhone} />}
+        {isPopupOpenSoftware && <CreaTuSoftware onClose={closePopupSoftware} />}
       </div>
       <div className="bg-black flex justify-between p-4 md:p-0 min-h-28">
         <div className="text-white ml-5 mt-2">

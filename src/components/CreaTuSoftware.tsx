@@ -16,7 +16,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         creationDate: '',
         idea: '',
         date: new Date().toLocaleDateString(),
-        formato_idea: '1',
+        formato_idea: '3',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -64,7 +64,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white h-full w-full">
             <div className="bg-gray-800 p-8 rounded-lg w-[60%]">
                 <div className="flex justify-center">
-                    <h2 className="text-2xl font-semibold mb-4">Describe tu Pagina Weby enviamela</h2>
+                    <h2 className="text-2xl font-semibold mb-4">Describe tu Software y enviamelo</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-8 flex gap-12">
