@@ -16,6 +16,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         creationDate: '',
         idea: '',
         date: new Date().toLocaleDateString(),
+        formato_idea: '1',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

@@ -15,8 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             const query = `
-                INSERT INTO ideas (name, email, project_title, description, created_at, updated_at)
-                VALUES ($1, $2, $3, $4, NOW(), NOW())
+                INSERT INTO ideas (name, email, project_title, description, created_at, updated_at, formato_idea)
+                VALUES ($1, $2, $3, $4, NOW(), NOW(), $5)
             `;
 
             await pool.query(query, [name, email, projectTitle, idea]);

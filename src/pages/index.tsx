@@ -8,7 +8,7 @@ import WebButton from "@/components/WebButton";
 import SoftwareButton from "@/components/SoftwareButton";
 import Light from '@/components/Light';
 import Cross from '@/components/Cross';
-import CreaTuIdea from '@/components/CreaTuIdea';
+import CreaTuIdea from '@/components/CreaTuWeb';
 
 export default function Home() {
   const [isWebOn, setisWebOn] = useState(false);
