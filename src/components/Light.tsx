@@ -4,7 +4,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Light({ className }: any) {
     return (
-        <div className={`shadow-md rounded-lg ${className}`} >
+        <div className={`rounded-lg ${className}`} >
             <div className="flex flex-col justify-center items-center">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
