@@ -10,11 +10,6 @@ const pool = new Pool({
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    console.log(process.env.DATABASE_USER);
-console.log(process.env.DATABASE_HOST);
-console.log(process.env.DATABASE_NAME);
-console.log(process.env.DATABASE_PASSWORD);
-console.log(process.env.DATABASE_PORT);
 
     if (req.method === 'POST') {
         const { name, email, projectTitle, idea, date } = req.body;
