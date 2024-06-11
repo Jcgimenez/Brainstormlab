@@ -10,21 +10,27 @@ const pool = new Pool({
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { name, email, projectTitle, idea, date, formato_idea } = req.body;
+
+    if (req.method === 'GET') {
+        const { email } = req.query;
+
+        if (!email) {
+            res.status(400).json({ success: false, message: 'Email parameter is required' });
+            return;
+        }
 
         try {
             const query = `
-                INSERT INTO ideas (name, email, project_title, description, created_at, updated_at, formato_idea)
-                VALUES ($1, $2, $3, $4, NOW(), NOW(), $5)
+                SELECT * FROM ideas
+                WHERE email = $1
             `;
 
-            await pool.query(query, [name, email, projectTitle, idea, formato_idea]);
+            const { rows } = await pool.query(query, [email]);
 
-            res.status(200).json({ success: true });
+            res.status(200).json({ success: true, ideas: rows });
         } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ success: false, error: 'Database error' });
+            console.error(error);
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
     } else {
         res.status(405).json({ success: false, message: 'Method not allowed' });

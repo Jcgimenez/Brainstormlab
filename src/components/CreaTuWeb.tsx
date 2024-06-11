@@ -13,7 +13,6 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         name: '',
         email: '',
         projectTitle: '',
-        creationDate: '',
         idea: '',
         date: new Date().toLocaleDateString(),
         formato_idea: '1',
@@ -27,12 +26,9 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         try {
-            toast.info('Guardando en la base de datos...');
-
             const response = await fetch('/api/saveIdea', {
                 method: 'POST',
                 headers: {
@@ -41,16 +37,22 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                 body: JSON.stringify(formData),
             });
 
-            const data = await response.json();
-
-
-            toast.success('Datos guardados con éxito!');
-
+            if (response.ok) {
+                toast.success('Idea guardada exitosamente');
+                setFormData({
+                    name: '',
+                    email: '',
+                    projectTitle: '',
+                    idea: '',
+                    date: new Date().toLocaleDateString(),
+                    formato_idea: '1',
+                });
+            } else {
+                toast.error('Error al guardar la idea');
+            }
         } catch (error) {
-            toast.error('Error al guardar los datos');
+            toast.error('Error al guardar la idea', );
         }
-
-        onClose();
     };
 
     useEffect(() => {
