@@ -16,6 +16,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
         idea: '',
         date: new Date().toLocaleDateString(),
         formato_idea: '1',
+        estado_ideas: '1',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -46,12 +47,13 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                     idea: '',
                     date: new Date().toLocaleDateString(),
                     formato_idea: '1',
+                    estado_ideas: '1',
                 });
             } else {
                 toast.error('Error al guardar la idea');
             }
         } catch (error) {
-            toast.error('Error al guardar la idea', );
+            toast.error('Error al guardar la idea',);
         }
     };
 

@@ -10,7 +10,6 @@ const pool = new Pool({
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
     if (req.method === 'GET') {
         const { email } = req.query;
 
@@ -20,14 +19,63 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         try {
-            const query = `
+            const queryIdeas = `
                 SELECT * FROM ideas
                 WHERE email = $1
             `;
+            const { rows: ideas } = await pool.query(queryIdeas, [email]);
 
-            const { rows } = await pool.query(query, [email]);
+            if (ideas.length > 0) {
+                const formatoIds = ideas.map(idea => idea.formato_idea);
 
-            res.status(200).json({ success: true, ideas: rows });
+                const queryFormatos = `
+                    SELECT id, description FROM formato_ideas
+                    WHERE id = ANY($1::int[])
+                `;
+
+                const estadoIds = ideas.map(idea => idea.estado_ideas);
+
+                const queryEstados = `
+                SELECT id, description FROM estados_idea
+                WHERE id = ANY($1::int[])
+            `;
+
+                const { rows: formatos } = await pool.query(queryFormatos, [formatoIds]);
+
+                const { rows: estados } = await pool.query(queryEstados, [estadoIds]);
+
+                const formatoMap = formatos.reduce((acc, formato) => {
+                    acc[formato.id] = formato.description.toUpperCase();
+                    return acc;
+                }, {});
+
+                const estadoMap = estados.reduce((acc, estado) => {
+                    acc[estado.id] = estado.description.toUpperCase();
+                    return acc;
+                }, {});
+
+
+                const updatedIdeas = ideas.map(idea => {
+                    const updatedIdea = {
+                        ...idea,
+                        formato_idea: formatoMap[idea.formato_idea] || idea.formato_idea,
+                        estado_ideas: estadoMap[idea.estado_ideas] || idea.estado_ideas,
+                    };
+
+                    // Convertir todos los campos de la idea a mayúsculas
+                    Object.keys(updatedIdea).forEach(key => {
+                        if (typeof updatedIdea[key] === 'string') {
+                            updatedIdea[key] = updatedIdea[key].toUpperCase();
+                        }
+                    });
+
+                    return updatedIdea;
+                });
+
+                res.status(200).json({ success: true, ideas: updatedIdeas });
+            } else {
+                res.status(200).json({ success: true, ideas: [] });
+            }
         } catch (error) {
             console.error(error);
             res.status(500).json({ success: false, message: 'Internal Server Error' });

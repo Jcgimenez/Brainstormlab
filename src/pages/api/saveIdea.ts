@@ -11,9 +11,10 @@ const pool = new Pool({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const { name, email, projectTitle, idea, date, formato_idea } = req.body;
+        const { name, email, projectTitle, idea, date, formato_idea,  estado} = req.body;
 
         try {
+
             const query = `
                 INSERT INTO ideas (name, email, project_title, description, created_at, updated_at, formato_idea)
                 VALUES ($1, $2, $3, $4, NOW(), NOW(), $5)
