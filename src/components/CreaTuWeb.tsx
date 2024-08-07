@@ -53,7 +53,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                 toast.error('Error al guardar la idea');
             }
         } catch (error) {
-            toast.error('Error al guardar la idea',);
+            toast.error('Error al guardar la idea');
         }
     };
 
@@ -66,12 +66,12 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white h-full w-full">
-            <div className="bg-gray-800 p-8 rounded-lg w-[60%]">
+            <div className="bg-gray-800 p-4 sm:p-8 rounded-lg w-full sm:w-3/4 lg:w-1/2 xl:w-1/3">
                 <div className="flex justify-center">
-                    <h2 className="text-2xl font-semibold mb-4">Describe tu Web y enviamela</h2>
+                    <h2 className="text-xl sm:text-2xl font-semibold mb-4">Describe tu Web y enviamela</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-8 flex gap-12">
+                    <div className="mb-4 sm:mb-8 flex flex-col sm:flex-row gap-4 sm:gap-12">
                         <div className="w-full">
                             <label htmlFor="name" className="block text-sm font-medium text-gray-500">
                                 Nombre y Apellido
@@ -101,7 +101,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                             />
                         </div>
                     </div>
-                    <div className="mb-8 flex gap-12">
+                    <div className="mb-4 sm:mb-8 flex flex-col sm:flex-row gap-4 sm:gap-12">
                         <div className="w-full">
                             <label htmlFor="projectTitle" className="block text-sm font-medium text-gray-500">
                                 Título de tu proyecto
@@ -132,7 +132,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                             />
                         </div>
                     </div>
-                    <div className="mb-8">
+                    <div className="mb-4 sm:mb-8">
                         <label htmlFor="idea" className="block text-sm font-medium text-gray-500">
                             Describe la idea
                         </label>
@@ -146,7 +146,7 @@ const CreaTuIdea: React.FC<CreaTuIdeaProps> = ({ onClose }) => {
                             required
                         ></textarea>
                     </div>
-                    <div className="flex justify-end gap-5">
+                    <div className="flex justify-end gap-2 sm:gap-5">
                         <DelButton onClick={onClose} />
                         <ValidButton />
                     </div>
